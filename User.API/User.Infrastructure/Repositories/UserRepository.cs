@@ -39,14 +39,14 @@ namespace Users.Infrastructure.Repositories
             return true;
         }
 
-        public async Task<User?> GetUserByEmailAsync(string email)
+        public async Task<User> GetUserByEmailAsync(string email)
         {
-            return await _context.Users.SingleOrDefaultAsync(u => u.Email == email);
+            return await _context.Users.SingleOrDefaultAsync(u => u.Email == email) ?? new User();
         }
 
-        public async Task<User?> GetUserByIdAsync(int userid)
+        public async Task<User> GetUserByIdAsync(int userid)
         {
-            return await _context.Users.FindAsync(userid);
+            return await _context.Users.FindAsync(userid) ?? new User();
         }
 
         public async Task<bool> UpdateUserAsync(User user)
