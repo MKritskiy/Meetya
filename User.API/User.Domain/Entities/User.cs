@@ -10,8 +10,8 @@ namespace Users.Domain.Entities
         public string Password { get; set; } = null!;
         public string Salt { get; set; } = null!;
         [DataType(DataType.PhoneNumber)]
-        public string PhoneNumber { get; set; } = null!;
+        public string? PhoneNumber { get; set; }
         public Profile? Profile { get; set; }
-        public string Role {  get; set; } = Roles.User;
+        public string Role { get; set; } = Roles.User;
     }
 }

@@ -5,7 +5,7 @@ namespace Users.Infrastructure.General
 {
     public class Encrypt : IEncrypt
     {
-        public string HashPassword(string password, string salt) 
+        public string HashPassword(string password, string salt)
             => Convert.ToBase64String(
                 KeyDerivation.Pbkdf2(
                     password,

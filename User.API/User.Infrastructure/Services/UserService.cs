@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Users.Application.Exceptions;
+﻿using Users.Application.Exceptions;
 using Users.Application.Interfaces;
 using Users.Application.Models;
 using Users.Domain.Entities;
