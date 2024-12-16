@@ -1,4 +1,4 @@
-﻿namespace Users.Domain.Common;
+﻿namespace Share.Domain.Common;
 
 public abstract class BaseEntity
 {

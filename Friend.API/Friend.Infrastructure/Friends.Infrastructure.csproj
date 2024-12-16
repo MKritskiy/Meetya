@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.10" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Share\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\Friend.Application\Friends.Application.csproj" />
+    <ProjectReference Include="..\Friend.Domain\Friends.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

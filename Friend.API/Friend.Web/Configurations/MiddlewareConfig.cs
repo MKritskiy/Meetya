@@ -1,6 +1,6 @@
-﻿using Users.Infrastructure.Data;
+﻿using Friends.Infrastructure.Data;
 
-namespace Users.Web.Configurations
+namespace Friends.Web.Configurations
 {
     public static class MiddlewareConfig
     {
@@ -36,7 +36,7 @@ namespace Users.Web.Configurations
 
             try
             {
-                var context = services.GetRequiredService<ApplicationDbContext>();
+                var context = services.GetRequiredService<FriendDbContext>();
                 //          context.Database.Migrate();
                 context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();

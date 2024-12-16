@@ -1,13 +1,10 @@
-﻿using Users.Domain.Entities;
+﻿using Application.Interfaces;
+using Users.Domain.Entities;
 
 namespace Users.Application.Interfaces
 {
-    public interface IUserRepository
+    public interface IUserRepository : IBaseRepository<User>
     {
-        Task<User> GetUserByIdAsync(int userid);
         Task<User> GetUserByEmailAsync(string email);
-        Task<int?> CreateUserAsync(User user);
-        Task<bool> UpdateUserAsync(User user);
-        Task<bool> DeleteUserAsync(int userId);
     }
 }

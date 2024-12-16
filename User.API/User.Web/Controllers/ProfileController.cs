@@ -2,70 +2,69 @@
 using Users.Application.Interfaces;
 using Users.Domain.Entities;
 
-namespace Users.Web.Controllers
+namespace Users.Web.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class ProfileController(IProfileService ProfileService) : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ProfileController(IProfileService ProfileService) : ControllerBase
+    [HttpPost("add")]
+    public async Task<IActionResult> AddProfile([FromBody] Profile profile)
     {
-        [HttpPost("add")]
-        public async Task<IActionResult> AddProfile([FromBody] Profile profile)
+        try
         {
-            try
-            {
-                var profileId = await ProfileService.AddProfile(profile);
-                return Ok(profileId);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            var profileId = await ProfileService.AddProfile(profile);
+            return Ok(profileId);
         }
-
-        [HttpDelete("delete/{profileId}")]
-        public async Task<IActionResult> DeleteProfile(int profileId)
+        catch (Exception ex)
         {
-            try
-            {
-                await ProfileService.DeleteProfile(profileId);
-                return Ok();
-            }
-            catch (InvalidOperationException)
-            {
-                return NotFound("Profile not found.");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            return StatusCode(500, ex.Message);
         }
+    }
 
-        [HttpGet("{profileId}")]
-        public async Task<IActionResult> GetProfileById(int profileId)
+    [HttpDelete("delete/{profileId}")]
+    public async Task<IActionResult> DeleteProfile(int profileId)
+    {
+        try
         {
-            try
-            {
-                var profile = await ProfileService.GetProfileById(profileId);
-                return Ok(profile);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            await ProfileService.DeleteProfile(profileId);
+            return Ok();
         }
-
-        [HttpGet("user/{userId}")]
-        public async Task<IActionResult> GetProfilesByUserId(int userId)
+        catch (InvalidOperationException)
         {
-            try
-            {
-                var profiles = await ProfileService.GetProfilesByUserId(userId);
-                return Ok(profiles);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            return NotFound("Profile not found.");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);
+        }
+    }
+
+    [HttpGet("{profileId}")]
+    public async Task<IActionResult> GetProfileById(int profileId)
+    {
+        try
+        {
+            var profile = await ProfileService.GetProfileById(profileId);
+            return Ok(profile);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);
+        }
+    }
+
+    [HttpGet("user/{userId}")]
+    public async Task<IActionResult> GetProfilesByUserId(int userId)
+    {
+        try
+        {
+            var profiles = await ProfileService.GetProfilesByUserId(userId);
+            return Ok(profiles);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);
         }
     }
 }

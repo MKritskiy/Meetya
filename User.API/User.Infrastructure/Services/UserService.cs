@@ -23,7 +23,7 @@ namespace Users.Infrastructure.Services
             if (user.Email == null || user.Password == null) throw new InvalidOperationException("Incorrect User Data");
             user.Salt = General.Helpers.GenerateSalt();
             user.Password = _encrypt.HashPassword(user.Password, user.Salt);
-            return await _userRepository.CreateUserAsync(user) ?? 0;
+            return await _userRepository.AddAsync(user) ?? 0;
         }
 
 
