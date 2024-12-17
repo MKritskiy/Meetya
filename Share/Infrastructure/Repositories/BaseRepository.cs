@@ -2,6 +2,8 @@
 
 using Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace Infrastructure.Repositories;
 
@@ -39,6 +41,34 @@ public abstract class BaseRepository<T> : IBaseRepository<T> where T : class
     public async Task<T?> GetByIdAsync(params object[] ids)
     {
         return await _dbSet.FindAsync(ids);
+    }
+
+    public virtual IEnumerable<T> Get(
+            Expression<Func<T, bool>> filter = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+            string includeProperties = "")
+    {
+        IQueryable<T> query = _dbSet;
+
+        if (filter != null)
+        {
+            query = query.Where(filter);
+        }
+
+        foreach (var includeProperty in includeProperties.Split
+            (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+        {
+            query = query.Include(includeProperty);
+        }
+
+        if (orderBy != null)
+        {
+            return orderBy(query).ToList();
+        }
+        else
+        {
+            return query.ToList();
+        }
     }
 
     public async Task<bool> UpdateAsync(T entity)

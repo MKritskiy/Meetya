@@ -1,4 +1,6 @@
-﻿namespace Application.Interfaces;
+﻿using System.Linq.Expressions;
+
+namespace Application.Interfaces;
 
 public interface IBaseRepository<T> where T : class
 {
@@ -6,4 +8,7 @@ public interface IBaseRepository<T> where T : class
     Task<bool> DeleteByIdAsync(params object[] ids);
     Task<int?> AddAsync(T entity);
     Task<bool> UpdateAsync(T entity);
+    IEnumerable<T> Get(Expression<Func<T, bool>> filter = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+            string includeProperties = "");
 }
