@@ -14,7 +14,4 @@ public class Poll : BaseEntity
 
     public string PreferredDates { get; set; }
 
-    [ForeignKey("EventId")]
-    public Event Event { get; set; }
-
 }

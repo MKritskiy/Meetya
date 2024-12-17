@@ -1,5 +1,6 @@
 ﻿using Serilog;
-namespace Friends.Web.Configurations;
+
+namespace Events.Web.Configurations;
 
 public static class LoggerConfigs
 {

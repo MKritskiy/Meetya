@@ -12,6 +12,4 @@ public class EventParticipant
     [Key, Column(Order = 1)]
     public int ProfileId { get; set; }
 
-    [ForeignKey("EventId")]
-    public Event Event { get; set; }
 }

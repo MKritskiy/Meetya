@@ -1,6 +1,6 @@
-﻿using Friends.Infrastructure.Data;
+﻿using Events.Infrastructure.Data;
 
-namespace Friends.Web.Configurations;
+namespace Events.Web.Configurations;
 
 public static class MiddlewareConfig
 {
@@ -14,7 +14,7 @@ public static class MiddlewareConfig
         {
             app.UseHsts();
         }
-        
+
         app.UseSwagger(); // Includes AddFileServer and static files middleware
         app.UseSwaggerUI(c =>
         {
@@ -36,7 +36,7 @@ public static class MiddlewareConfig
 
         try
         {
-            var context = services.GetRequiredService<FriendDbContext>();
+            var context = services.GetRequiredService<EventDbContext>();
             //          context.Database.Migrate();
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();

@@ -12,13 +12,23 @@ public class ParticipantService : IParticipantService
         _eventParticipantRepository = eventParticipantRepository;
     }
 
-    public async Task<bool> AddParticipantToEvent(EventParticipant participant, int eventId)
+    public async Task<bool> AddParticipantToEvent(EventParticipant participant)
     {
+        if (participant == null) throw new ArgumentNullException(nameof(participant));
+        if (!IsValidParticipant(participant)) throw new ArgumentException("Invalid participant data.");
+
         return (await _eventParticipantRepository.AddAsync(participant) ?? 0) > 0;
     }
 
-    public async Task RemoveParticipantFromEvent(EventParticipant participant, int eventId)
+    public async Task RemoveParticipantFromEvent(EventParticipant participant)
     {
+        if (participant == null) throw new ArgumentNullException(nameof(participant));
+
         await _eventParticipantRepository.DeleteByIdAsync(participant.EventId, participant.ProfileId);
+    }
+
+    private bool IsValidParticipant(EventParticipant participant)
+    {
+        return participant.ProfileId > 0 && participant.EventId > 0;
     }
 }

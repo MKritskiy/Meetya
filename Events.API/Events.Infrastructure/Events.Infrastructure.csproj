@@ -5,7 +5,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
+  <ItemGroup>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.10" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Share\Application\Application.csproj" />
     <ProjectReference Include="..\..\Share\Domain\Domain.csproj" />

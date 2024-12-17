@@ -43,6 +43,18 @@ public abstract class BaseRepository<T> : IBaseRepository<T> where T : class
         return await _dbSet.FindAsync(ids);
     }
 
+    public async Task<T?> GetByIdAsync(string includeProperties = "", params object[] ids)
+    {
+        IQueryable<T> query = _dbSet;
+
+        foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+        {
+            query = query.Include(includeProperty);
+        }
+
+        return await query.FirstOrDefaultAsync(e => ids.Contains(EF.Property<object>(e, "Id")));
+    }
+
     public virtual async Task<IEnumerable<T>> Get(
             Expression<Func<T, bool>> filter = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
