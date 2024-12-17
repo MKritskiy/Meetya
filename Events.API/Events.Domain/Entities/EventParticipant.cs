@@ -10,7 +10,7 @@ public class EventParticipant
     public int EventId { get; set; }
 
     [Key, Column(Order = 1)]
-    public int UserId { get; set; }
+    public int ProfileId { get; set; }
 
     [ForeignKey("EventId")]
     public Event Event { get; set; }

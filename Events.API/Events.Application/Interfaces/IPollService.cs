@@ -1,6 +1,6 @@
 ﻿using Events.Domain.Entities;
 
-namespace Events.Application.Interfacesl;
+namespace Events.Application.Interfaces;
 
 public interface IPollService
 {

@@ -5,4 +5,5 @@ namespace Events.Application.Interfaces;
 
 public interface IPollRepository : IBaseRepository<Poll>
 {
+    Task<Poll?> GetPollByProfileId(int profileId);
 }
