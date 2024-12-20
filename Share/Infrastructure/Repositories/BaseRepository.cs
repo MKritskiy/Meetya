@@ -2,7 +2,6 @@
 
 using Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace Infrastructure.Repositories;
@@ -58,7 +57,9 @@ public abstract class BaseRepository<T> : IBaseRepository<T> where T : class
     public virtual async Task<IEnumerable<T>> Get(
             Expression<Func<T, bool>> filter = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
-            string includeProperties = "")
+            string includeProperties = "",
+            int? page = null,
+            int? pageSize = null)
     {
         IQueryable<T> query = _dbSet;
 
@@ -77,10 +78,14 @@ public abstract class BaseRepository<T> : IBaseRepository<T> where T : class
         {
             return await orderBy(query).ToListAsync();
         }
-        else
+
+        if (page.HasValue && pageSize.HasValue)
         {
-            return await query.ToListAsync();
+            query = query.Skip((page.Value-1)*pageSize.Value).Take(pageSize.Value);
         }
+        
+        return await query.ToListAsync();
+        
     }
 
     public async Task<bool> UpdateAsync(T entity)

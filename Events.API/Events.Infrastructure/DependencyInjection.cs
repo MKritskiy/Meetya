@@ -12,7 +12,7 @@ public static class DependencyInjection
     {
         string? connectionString = config.GetConnectionString("ConnectionString");
         services.AddDbContext<EventDbContext>(options => options.UseNpgsql(connectionString));
-
+        
         services.AddScoped<IPollRepository, PollRepository>();
         services.AddScoped<IEventParticipantRepository, EventParticipantRepository>();
         services.AddScoped<IEventRepository,EventRepository>();

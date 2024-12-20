@@ -29,9 +29,10 @@ public class ParticipantController : ControllerBase
         }
     }
 
-    [HttpDelete("remove")]
-    public async Task<IActionResult> RemoveParticipantFromEvent([FromBody] EventParticipant participant)
+    [HttpDelete("remove/{eventId}/{profileId}")]
+    public async Task<IActionResult> RemoveParticipantFromEvent(int eventId, int profileId)
     {
+        var participant = new EventParticipant() { EventId = eventId, ProfileId = profileId };
         try
         {
             await _participantService.RemoveParticipantFromEvent(participant);

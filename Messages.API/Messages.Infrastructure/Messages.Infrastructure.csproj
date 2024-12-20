@@ -5,5 +5,14 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.10" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\..\Share\Infrastructure\Infrastructure.csproj" />
+	  <ProjectReference Include="..\Messages.Domain\Messages.Domain.csproj" />
+	  <ProjectReference Include="..\Messages.Application\Messages.Application.csproj" />
 
+	</ItemGroup>
 </Project>

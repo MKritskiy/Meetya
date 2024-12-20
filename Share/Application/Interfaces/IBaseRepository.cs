@@ -12,5 +12,7 @@ public interface IBaseRepository<T> where T : class
     Task<bool> UpdateAsync(T entity);
     Task<IEnumerable<T>> Get(Expression<Func<T, bool>> filter = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
-            string includeProperties = "");
+            string includeProperties = "",
+            int? page = null,
+            int? pageSize = null);
 }

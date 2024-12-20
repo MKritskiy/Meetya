@@ -6,7 +6,7 @@ public class EventDbContext : DbContext
 {
     public EventDbContext(DbContextOptions<EventDbContext> options) : base(options) { }
 
-    public DbSet<Event> Friends { get; set; }
+    public DbSet<Event> Events { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
