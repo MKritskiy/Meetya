@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Events.Domain.Entities;
 using Events.Application.Interfaces;
+using Events.Application.Models;
 
 namespace Events.Web.Controllers;
 
@@ -45,12 +45,13 @@ public class EventController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetEvent(int id)
+    public async Task<ActionResult<EventDto>> GetEvent(int id)
     {
         try
         {
-            var @event = await _eventService.GetEvent(id);
-            return Ok(@event);
+
+            EventDto eventDto = await _eventService.GetEvent(id);
+            return Ok(eventDto);
         }
         catch (Exception ex)
         {

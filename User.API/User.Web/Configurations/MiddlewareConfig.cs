@@ -1,4 +1,7 @@
-﻿using Users.Infrastructure.Data;
+﻿using Domain.Constants;
+using Microsoft.OpenApi.Models;
+using Users.Domain.Constants;
+using Users.Infrastructure.Data;
 
 namespace Users.Web.Configurations
 {
@@ -14,11 +17,21 @@ namespace Users.Web.Configurations
             {
                 app.UseHsts();
             }
-            
-            app.UseSwagger(); // Includes AddFileServer and static files middleware
+
+            app.UseSwagger(c =>
+            {
+                c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
+                {
+                    swaggerDoc.Servers = new List<OpenApiServer>
+                    {
+                        new OpenApiServer { Url = GatewayConstants.GATEWAY_EXTERNAL_HOST + GatewayConstants.USER_API_ROUTE },
+                        new OpenApiServer { Url = GatewayConstants.USER_CONTAINER_EXTERNAL_HOST}
+                    };
+                });
+            });
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Teledock API v1");
+                c.SwaggerEndpoint("./swagger/v1/swagger.json", "Meetya API v1");
                 c.RoutePrefix = string.Empty;
             });
 

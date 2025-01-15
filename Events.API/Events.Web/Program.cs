@@ -25,7 +25,7 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "Teledock API",
+        Title = "Meetya API",
         Version = "v1"
     });
 });

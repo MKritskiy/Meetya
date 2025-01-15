@@ -1,0 +1,92 @@
+services:
+  events.web:
+    image: ${DOCKER_REGISTRY-}eventsweb
+    build:
+      context: .
+      dockerfile: Events.API/Events.Web/Dockerfile
+    environment:
+      - ConnectionStrings__ConnectionString=Host=events.db;Port=5432;Database=EventsDB;Username=postgres;Password=Pass1234
+    depends_on:
+      - events.db
+    ports:
+      - "50004:8080"
+
+  friends.web:
+    image: ${DOCKER_REGISTRY-}friendsweb
+    build:
+      context: .
+      dockerfile: Friend.API/Friend.Web/Dockerfile
+    environment:
+      - ConnectionStrings__ConnectionString=Host=friends.db;Port=5432;Database=FriendsDB;Username=postgres;Password=Pass1234
+    depends_on:
+      - friends.db
+    ports:
+      - "50003:8080"
+
+  users.web:
+    image: ${DOCKER_REGISTRY-}usersweb
+    build:
+      context: .
+      dockerfile: User.API/User.Web/Dockerfile
+    environment:
+      - ConnectionStrings__ConnectionString=Host=users.db;Port=5432;Database=UsersDB;Username=postgres;Password=Pass1234
+    depends_on:
+      - users.db
+    ports:
+      - "50002:8080"
+
+  messages.web:
+    image: ${DOCKER_REGISTRY-}messagesweb
+    build:
+      context: .
+      dockerfile: Messages.API/Messages.Web/Dockerfile
+    environment:
+      - ConnectionStrings__ConnectionString=Host=messages.db;Port=5432;Database=MessagesDB;Username=postgres;Password=Pass1234
+    depends_on:
+      - messages.db
+    ports:
+      - "50001:8080"
+
+  yarp.gateway:
+    image: ${DOCKER_REGISTRY-}yarpgateway
+    build:
+      context: .
+      dockerfile: Yarp.Gateway/Dockerfile
+    ports:
+      - "50000:8080"
+
+  events.db:
+    image: postgres
+    environment:
+      POSTGRES_DB: EventsDB
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Pass1234
+    ports:
+      - "5432:5432"
+
+  friends.db:
+    image: postgres
+    environment:
+      POSTGRES_DB: FriendsDB
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Pass1234
+    ports:
+      - "5433:5432"
+
+  users.db:
+    image: postgres
+    environment:
+      POSTGRES_DB: UsersDB
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Pass1234
+    ports:
+      - "5434:5432"
+
+  messages.db:
+    image: postgres
+    environment:
+      POSTGRES_DB: MessagesDB
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Pass1234
+    ports:
+      - "5435:5432"

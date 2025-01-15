@@ -41,7 +41,7 @@ public class ProfileController(IProfileService ProfileService) : ControllerBase
     }
 
     [HttpGet("{profileId}")]
-    public async Task<IActionResult> GetProfileById(int profileId)
+    public async Task<ActionResult<Profile?>> GetProfileById(int profileId)
     {
         try
         {

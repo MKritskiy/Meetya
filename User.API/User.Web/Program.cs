@@ -6,6 +6,7 @@ using Serilog;
 using Serilog.Extensions.Logging;
 using Users.Infrastructure;
 using Users.Web.Configurations;
+using Users.Domain.Constants;
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -41,7 +42,7 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "Teledock API",
+        Title = "Meetya API",
         Version = "v1"
     });
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -67,12 +68,14 @@ builder.Services.AddSwaggerGen(c =>
             new string[] { }
         }
     });
+    c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
 });
 
 #if (aspire)
 builder.AddServiceDefaults();
 #endif
 var app = builder.Build();
+
 await app.UseAppMiddlewareAndSeedDatabase();
 app.UseAuthentication();
 app.UseAuthorization();

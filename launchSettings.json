@@ -1,0 +1,19 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "events.web": "StartWithoutDebugging",
+        "friends.web": "StartWithoutDebugging",
+        "users.web": "StartWithoutDebugging",
+        "messages.web": "StartWithoutDebugging",
+        "yarp.gateway": "StartWithoutDebugging",
+        "events.db": "StartWithoutDebugging",
+        "friends.db": "StartWithoutDebugging",
+        "messages.db": "StartWithoutDebugging",
+        "users.db": "StartWithoutDebugging"
+      }
+    }
+  }
+}
