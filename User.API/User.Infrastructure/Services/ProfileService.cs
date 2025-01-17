@@ -32,5 +32,11 @@ namespace Users.Infrastructure.Services
         {
             return await _profileRepository.GetProfilesByUserIdAsync(userid);
         }
+
+        public async Task<IEnumerable<Profile>> GetProfilesByIds(int?[] ids)
+        {
+            var idSet = new HashSet<int?>(ids);
+            return await _profileRepository.Get(p => idSet.Contains(p.Id));
+        }
     }
 }

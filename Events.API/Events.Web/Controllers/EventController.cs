@@ -17,11 +17,11 @@ public class EventController : ControllerBase
     }
 
     [HttpPost("add")]
-    public async Task<IActionResult> AddEvent([FromBody] Event @event)
+    public async Task<IActionResult> AddEvent([FromBody] AddEventDto addEventDto)
     {
         try
         {
-            var eventId = await _eventService.AddEvent(@event);
+            var eventId = await _eventService.AddEvent(addEventDto.ToEvent());
             return Ok(eventId);
         }
         catch (Exception ex)

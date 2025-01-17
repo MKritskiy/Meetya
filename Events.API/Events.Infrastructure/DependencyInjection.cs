@@ -1,4 +1,6 @@
-﻿using Events.Application.Interfaces;
+﻿using Domain.Constants;
+using Events.Application;
+using Events.Application.Interfaces;
 using Events.Infrastructure.Data;
 using Events.Infrastructure.Repositories;
 using Events.Infrastructure.Services;
@@ -12,7 +14,12 @@ public static class DependencyInjection
     {
         string? connectionString = config.GetConnectionString("ConnectionString");
         services.AddDbContext<EventDbContext>(options => options.UseNpgsql(connectionString));
-        services.AddHttpClient();
+
+        services.AddHttpClient<IUsersApiClient, UsersApiClient>((provider, client) =>
+        {
+            client.BaseAddress = new Uri(GatewayConstants.GATEWAY_INTERNAL_HOST + GatewayConstants.USER_API_ROUTE);
+        });
+
         services.AddScoped<IPollRepository, PollRepository>();
         services.AddScoped<IEventParticipantRepository, EventParticipantRepository>();
         services.AddScoped<IEventRepository,EventRepository>();

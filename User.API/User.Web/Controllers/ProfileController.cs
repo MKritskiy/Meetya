@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Users.Application.Interfaces;
+using Users.Application.Models;
 using Users.Domain.Entities;
 
 namespace Users.Web.Controllers;
@@ -9,11 +10,11 @@ namespace Users.Web.Controllers;
 public class ProfileController(IProfileService ProfileService) : ControllerBase
 {
     [HttpPost("add")]
-    public async Task<IActionResult> AddProfile([FromBody] Profile profile)
+    public async Task<IActionResult> AddProfile([FromBody] AddProfileDto addProfileDto)
     {
         try
         {
-            var profileId = await ProfileService.AddProfile(profile);
+            var profileId = await ProfileService.AddProfile(addProfileDto.ToProfileModel());
             return Ok(profileId);
         }
         catch (Exception ex)
@@ -60,6 +61,20 @@ public class ProfileController(IProfileService ProfileService) : ControllerBase
         try
         {
             var profiles = await ProfileService.GetProfilesByUserId(userId);
+            return Ok(profiles);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);
+        }
+    }
+
+    [HttpGet("profiles")]
+    public async Task<ActionResult<IEnumerable<Profile>>> GetProfilesByIds([FromQuery] int?[] ids)
+    {
+        try
+        {
+            var profiles = await ProfileService.GetProfilesByIds(ids);
             return Ok(profiles);
         }
         catch (Exception ex)

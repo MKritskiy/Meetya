@@ -1,4 +1,5 @@
 ﻿using Events.Application.Interfaces;
+using Events.Application.Models;
 using Events.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,11 +17,11 @@ public class PollController : ControllerBase
     }
 
     [HttpPost("add")]
-    public async Task<IActionResult> AddPoll([FromBody] Poll poll)
+    public async Task<IActionResult> AddPoll([FromBody] AddPollDto addPollDto)
     {
         try
         {
-            var pollId = await _pollService.AddPoll(poll);
+            var pollId = await _pollService.AddPoll(addPollDto.ToPoll());
             return Ok(pollId);
         }
         catch (Exception ex)

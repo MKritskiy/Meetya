@@ -8,5 +8,6 @@ namespace Users.Application.Interfaces
         Task DeleteProfile(int profileId);
         Task<Profile> GetProfileById(int profileId);
         Task<IEnumerable<Profile>> GetProfilesByUserId(int userid);
+        Task<IEnumerable<Profile>> GetProfilesByIds(int?[] ids);
     }
 }
