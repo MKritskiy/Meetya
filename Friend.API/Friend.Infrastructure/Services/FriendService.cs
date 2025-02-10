@@ -1,4 +1,5 @@
-﻿using Friends.Application.Interfaces;
+﻿using Friends.Application;
+using Friends.Application.Interfaces;
 using Friends.Application.Models;
 using Friends.Domain.Entities;
 
@@ -7,10 +8,12 @@ namespace Friends.Infrastructure.Services;
 class FriendService : IFriendService
 {
     IFriendRepository _friendRepository;
+    IUsersApiClient _usersApiClient;
 
-    public FriendService(IFriendRepository friendRepository)
+    public FriendService(IFriendRepository friendRepository, IUsersApiClient usersApiClient)
     {
         _friendRepository = friendRepository;
+        _usersApiClient = usersApiClient;
     }
 
     public async Task<int> AddFriend(Friend friend)
@@ -35,10 +38,11 @@ class FriendService : IFriendService
     {
         var friend = await GetFriendByProfileId(profileId);
         if (friend.ProfileId==null) throw new InvalidOperationException();
+        var friendsProfilesIds = await _friendRepository.GetFriendsByProfileIdAsync(profileId);
         UserFriendDto userFriendDto = new UserFriendDto()
         {
-            ProfileId = profileId,
-            FriendsIds = await _friendRepository.GetFriendsByProfileIdAsync(profileId)
+            Profile = await _usersApiClient.ProfileAsync(profileId),
+            FriendsProfiles = await _usersApiClient.ProfilesAsync(friendsProfilesIds)
         };
         return  userFriendDto;
     }

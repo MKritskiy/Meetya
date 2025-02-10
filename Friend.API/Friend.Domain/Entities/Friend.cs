@@ -9,7 +9,7 @@ public class Friend
     public int? ProfileId { get; set; }
 
     [Key, Column(Order = 1)]
-    public int FriendId { get; set; }
+    public int? FriendId { get; set; }
 
     public DateTimeOffset Created { get; set; }
 }

@@ -1,8 +1,10 @@
+using Domain.Constants;
 using Friends.Infrastructure;
 using Friends.Web.Configurations;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Extensions.Logging;
+using Web.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,5 +36,10 @@ builder.AddServiceDefaults();
 #endif
 var app = builder.Build();
 await app.UseAppMiddlewareAndSeedDatabase();
-
+await app.UseAppSwaggerOpenApiServers(
+    new List<OpenApiServer>
+    {
+        new OpenApiServer { Url = GatewayConstants.GATEWAY_EXTERNAL_HOST + GatewayConstants.FRIEND_API_ROUTE },
+        new OpenApiServer { Url = GatewayConstants.FRIEND_CONTAINER_EXTERNAL_HOST}
+    });
 app.Run();

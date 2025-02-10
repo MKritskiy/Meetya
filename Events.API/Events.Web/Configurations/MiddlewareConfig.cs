@@ -17,23 +17,6 @@ public static class MiddlewareConfig
             app.UseHsts();
         }
 
-        app.UseSwagger(c =>
-        {
-            c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
-            {
-                swaggerDoc.Servers = new List<OpenApiServer>
-                    {
-                        new OpenApiServer { Url = GatewayConstants.GATEWAY_EXTERNAL_HOST + GatewayConstants.EVENT_API_ROUTE },
-                        new OpenApiServer { Url = GatewayConstants.EVENT_CONTAINER_EXTERNAL_HOST}
-                    };
-            });
-        });
-        app.UseSwaggerUI(c =>
-        {
-            c.SwaggerEndpoint("./swagger/v1/swagger.json", "Meetya API v1");
-            c.RoutePrefix = string.Empty;
-        });
-
         //app.UseHttpsRedirection(); // Note this will drop Authorization headers
 
         await SeedDatabase(app);

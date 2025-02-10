@@ -2,7 +2,7 @@
 {
     public class UserFriendDto
     {
-        public int ProfileId { get; set; }
-        public IEnumerable<int> FriendsIds { get; set; } = new List<int>();
+        public Profile? Profile { get; set; }
+        public IEnumerable<Profile> FriendsProfiles { get; set; } = new List<Profile>();
     }
 }

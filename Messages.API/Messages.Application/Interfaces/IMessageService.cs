@@ -10,7 +10,7 @@ public interface IMessageService
     // В количестве countInPage на одной странице,
     // начиная с page номера страницы 
     Task<IEnumerable<Message>> GetMessagesByEventId(int eventId, int countInPage, int page);
-    // Возвращает все сообщения, написанные с профиля с profileId в рамках ивента с eventId
+    // Возвращает все сообщения, написанные с профиля c profileId в рамках ивента с eventId
     Task<IEnumerable<Message>> GetMessagesByProfileId(int profileId, int eventId);
     Task<bool> UpdateMessage(Message message);
     Task<int> AddMessage(Message message);

@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Share\Web\Web.csproj" />
     <ProjectReference Include="..\User.Application\Users.Application.csproj" />
     <ProjectReference Include="..\User.Infrastructure\Users.Infrastructure.csproj" />
   </ItemGroup>

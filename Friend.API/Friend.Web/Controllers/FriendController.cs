@@ -1,4 +1,5 @@
 ﻿using Friends.Application.Interfaces;
+using Friends.Application.Models;
 using Friends.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,11 +10,11 @@ public class FriendController(IFriendService FriendService) : ControllerBase
 {
 
     [HttpPost("add")]
-    public async Task<IActionResult> AddFriend([FromBody] Friend friend)
+    public async Task<IActionResult> AddFriend([FromBody] AddFriendDto friendDto)
     {
         try
         {
-            var friendId = await FriendService.AddFriend(friend);
+            var friendId = await FriendService.AddFriend(friendDto.ToFriend());
             return Ok(friendId);
         }
         catch (Exception ex)

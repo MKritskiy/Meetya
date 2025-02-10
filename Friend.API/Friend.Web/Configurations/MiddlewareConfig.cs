@@ -14,13 +14,6 @@ public static class MiddlewareConfig
         {
             app.UseHsts();
         }
-        
-        app.UseSwagger(); // Includes AddFileServer and static files middleware
-        app.UseSwaggerUI(c =>
-        {
-            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Teledock API v1");
-            c.RoutePrefix = string.Empty;
-        });
 
         //app.UseHttpsRedirection(); // Note this will drop Authorization headers
 

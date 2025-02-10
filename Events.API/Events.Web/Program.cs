@@ -4,6 +4,8 @@ using Serilog;
 using Events.Infrastructure;
 using Events.Web.Configurations;
 using System.Text.Json.Serialization;
+using Domain.Constants;
+using Web.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,5 +37,10 @@ builder.AddServiceDefaults();
 #endif
 var app = builder.Build();
 await app.UseAppMiddlewareAndSeedDatabase();
-
+await app.UseAppSwaggerOpenApiServers(
+    new List<OpenApiServer>
+    {
+        new OpenApiServer { Url = GatewayConstants.GATEWAY_EXTERNAL_HOST + GatewayConstants.EVENT_API_ROUTE },
+        new OpenApiServer { Url = GatewayConstants.EVENT_CONTAINER_EXTERNAL_HOST}
+    });
 app.Run();

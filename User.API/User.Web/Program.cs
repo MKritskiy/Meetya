@@ -1,12 +1,13 @@
+using Domain.Constants;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Extensions.Logging;
+using System.Text;
 using Users.Infrastructure;
 using Users.Web.Configurations;
-using Users.Domain.Constants;
+using Web.Configurations;
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -77,6 +78,12 @@ builder.AddServiceDefaults();
 var app = builder.Build();
 
 await app.UseAppMiddlewareAndSeedDatabase();
+await app.UseAppSwaggerOpenApiServers(
+    new List<OpenApiServer>
+    {
+        new OpenApiServer { Url = GatewayConstants.GATEWAY_EXTERNAL_HOST + GatewayConstants.USER_API_ROUTE },
+        new OpenApiServer { Url = GatewayConstants.USER_CONTAINER_EXTERNAL_HOST}
+    });
 app.UseAuthentication();
 app.UseAuthorization();
 app.Run();
