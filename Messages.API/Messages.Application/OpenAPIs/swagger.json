@@ -1,0 +1,641 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Meetya API",
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:50000/events-api/"
+    },
+    {
+      "url": "http://localhost:50004"
+    }
+  ],
+  "paths": {
+    "/api/Event/add": {
+      "post": {
+        "tags": [
+          "Event"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddEventDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddEventDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddEventDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Event/delete/{id}": {
+      "delete": {
+        "tags": [
+          "Event"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Event/{id}": {
+      "get": {
+        "tags": [
+          "Event"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Event": {
+      "get": {
+        "tags": [
+          "Event"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Event/update": {
+      "put": {
+        "tags": [
+          "Event"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Event"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Event"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Event"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Participant/add": {
+      "post": {
+        "tags": [
+          "Participant"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EventParticipant"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EventParticipant"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/EventParticipant"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Participant/remove/{eventId}/{profileId}": {
+      "delete": {
+        "tags": [
+          "Participant"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "profileId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Poll/add": {
+      "post": {
+        "tags": [
+          "Poll"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddPollDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddPollDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddPollDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Poll/delete/{pollId}": {
+      "delete": {
+        "tags": [
+          "Poll"
+        ],
+        "parameters": [
+          {
+            "name": "pollId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Poll/profile/{profileId}": {
+      "get": {
+        "tags": [
+          "Poll"
+        ],
+        "parameters": [
+          {
+            "name": "profileId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Poll/event/{eventId}": {
+      "get": {
+        "tags": [
+          "Poll"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Poll/update": {
+      "put": {
+        "tags": [
+          "Poll"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Poll"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Poll"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Poll"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AddEventDto": {
+        "required": [
+          "creatorId",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "creatorId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "place": {
+            "type": "string",
+            "nullable": true
+          },
+          "time": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "budget": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "peopleCount": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "photoPreview": {
+            "type": "string",
+            "nullable": true
+          },
+          "address": {
+            "type": "string",
+            "nullable": true
+          },
+          "draft": {
+            "type": "boolean"
+          },
+          "pollEnabled": {
+            "type": "boolean"
+          },
+          "geoEnabled": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AddPollDto": {
+        "required": [
+          "eventId",
+          "profileId"
+        ],
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "profileId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "preferredDates": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Event": {
+        "required": [
+          "creatorId",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastModified": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "creatorId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "place": {
+            "type": "string",
+            "nullable": true
+          },
+          "time": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "budget": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "peopleCount": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "photoPreview": {
+            "type": "string",
+            "nullable": true
+          },
+          "address": {
+            "type": "string",
+            "nullable": true
+          },
+          "draft": {
+            "type": "boolean"
+          },
+          "pollEnabled": {
+            "type": "boolean"
+          },
+          "geoEnabled": {
+            "type": "boolean"
+          },
+          "eventParticipants": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EventParticipant"
+            },
+            "nullable": true
+          },
+          "polls": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Poll"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EventDto": {
+        "type": "object",
+        "properties": {
+          "event": {
+            "$ref": "#/components/schemas/Event"
+          },
+          "profile": {
+            "$ref": "#/components/schemas/Profile"
+          }
+        },
+        "additionalProperties": false
+      },
+      "EventParticipant": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "profileId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Poll": {
+        "required": [
+          "eventId",
+          "profileId"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastModified": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "eventId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "profileId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "preferredDates": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Profile": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastModified": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "age": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gender": {
+            "type": "string",
+            "nullable": true
+          },
+          "about": {
+            "type": "string",
+            "nullable": true
+          },
+          "currentAvatar": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastActivity": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

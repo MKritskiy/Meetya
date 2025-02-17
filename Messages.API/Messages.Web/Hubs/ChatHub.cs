@@ -1,5 +1,5 @@
-﻿using Messages.Application.Interfaces;
-using Messages.Application.Models;
+﻿using Messages.Application;
+using Messages.Application.Interfaces;
 using Messages.Domain.Entities;
 using Microsoft.AspNetCore.SignalR;
 
@@ -8,12 +8,12 @@ namespace Messages.Web.Hubs;
 public class ChatHub : Hub
 {
     private readonly IMessageService _messageService;
-    private readonly IParticipantService _participantService;
+    private readonly IEventsClientApi _eventsClientApi;
 
-    public ChatHub(IMessageService messageService, IParticipantService participantService)
+    public ChatHub(IMessageService messageService, IEventsClientApi eventsClientApi)
     {
         _messageService = messageService;
-        _participantService = participantService;
+        _eventsClientApi = eventsClientApi;
     }
 
     public async Task Send(int eventId, string content, int profileId)
@@ -26,22 +26,29 @@ public class ChatHub : Hub
             Timestamp = DateTime.UtcNow
         };
         await _messageService.AddMessage(message);
-        await Clients.Group(eventId.ToString()).SendAsync("Recieve", message);
+        await Clients.Group(eventId.ToString()).SendAsync($"Receive_{eventId}", message);
     }
+
     public async Task JoinGroup(int eventId, int profileId)
     {
-        var added = await _participantService.AddParticipantToEventAsync(new ParticipantDto() { EventId = eventId, ProfileId = profileId });
-        if (added.IsSuccessStatusCode)
+        try
         {
-            await Groups.AddToGroupAsync(Context.ConnectionId, eventId.ToString());
+            await _eventsClientApi.ApiParticipantAddAsync(new EventParticipant() { EventId = eventId, ProfileId = profileId });
         }
+        catch(Exception ex) 
+        {
+            Console.WriteLine(ex.Message);
+        }
+        Console.WriteLine(eventId);
+        await Groups.AddToGroupAsync(Context.ConnectionId, eventId.ToString());
+
     }
     public async Task LeaveGroup(int eventId, int profileId)
     {
-        var removed = await _participantService.RemoveParicipantFromEventAsync(new ParticipantDto() { EventId = eventId, ProfileId = profileId });
-        if (removed.IsSuccessStatusCode)
-        {
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, eventId.ToString());
-        }
+
+         await _eventsClientApi.ApiParticipantRemoveAsync(eventId, profileId);
+         await Groups.RemoveFromGroupAsync(Context.ConnectionId, eventId.ToString());
+
+
     }
 }

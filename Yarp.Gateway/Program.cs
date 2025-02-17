@@ -8,15 +8,24 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("customPolicy", builder =>
     {
-        builder.AllowAnyOrigin();
+        builder.WithOrigins("http://127.0.0.1:5500")
+               .AllowAnyMethod()
+               .AllowAnyHeader()
+               .AllowCredentials();
     });
 });
 
 var app = builder.Build();
-app.UseCors();
-app.UseRouting();
 
-app.MapReverseProxy();
+app.UseWebSockets();
+app.UseCors("customPolicy");
+app.MapReverseProxy(proxyPipeline =>
+{
+    proxyPipeline.UseWebSockets();
+    proxyPipeline.UseSessionAffinity();
+    proxyPipeline.UseLoadBalancing();
+});
+
 
 
 app.Run();

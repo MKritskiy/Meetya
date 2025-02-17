@@ -17,6 +17,7 @@
   	<PackageReference Include="Swashbuckle.AspNetCore" Version="7.1.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Share\Web\Web.csproj" />
     <ProjectReference Include="..\Messages.Application\Messages.Application.csproj" />
     <ProjectReference Include="..\Messages.Infrastructure\Messages.Infrastructure.csproj" />
   </ItemGroup>

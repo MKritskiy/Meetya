@@ -3,7 +3,6 @@ using Serilog.Extensions.Logging;
 using Serilog;
 using Events.Infrastructure;
 using Events.Web.Configurations;
-using System.Text.Json.Serialization;
 using Domain.Constants;
 using Web.Configurations;
 

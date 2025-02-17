@@ -16,7 +16,6 @@ public class ParticipantService : IParticipantService
     {
         if (participant == null) throw new ArgumentNullException(nameof(participant));
         if (!IsValidParticipant(participant)) throw new ArgumentException("Invalid participant data.");
-
         return (await _eventParticipantRepository.AddAsync(participant) ?? 0) > 0;
     }
 

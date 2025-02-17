@@ -1,0 +1,262 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Event Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .auth-form, .profile-section {
+            margin-bottom: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+        }
+
+        .chat-container {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 20px;
+        }
+
+        .events-list {
+            padding: 10px;
+            border-right: 1px solid #ddd;
+        }
+
+        .chat-box {
+            height: 500px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <!-- Auth Section -->
+    <div class="auth-form">
+        <h2>Register</h2>
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="register()">Register</button>
+
+        <h2>Login</h2>
+        <input type="email" id="loginEmail" placeholder="Email">
+        <input type="password" id="loginPassword" placeholder="Password">
+        <button onclick="login()">Login</button>
+    </div>
+
+    <!-- Profile Section -->
+    <div class="profile-section" hidden>
+        <h2>Create Profile</h2>
+        <input type="text" id="firstName" placeholder="First Name">
+        <input type="text" id="lastName" placeholder="Last Name">
+        <button onclick="createProfile()">Create Profile</button>
+    </div>
+
+    <!-- Main App -->
+    <div class="main-app" hidden>
+        <div>
+            <h2>Create Event</h2>
+            <input type="text" id="eventName" placeholder="Event Name">
+            <button onclick="createEv()">Create</button>
+        </div>
+
+        <div class="chat-container">
+            <div class="events-list">
+                <h3>Events</h3>
+                <ul id="events"></ul>
+            </div>
+
+            <div class="chat-area">
+                <div class="chat-box" id="chatBox"></div>
+                <input type="text" id="messageInput" placeholder="Type message...">
+                <button onclick="sendMessage()">Send</button>
+                <button onclick="leaveEvent()">Leave Event</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
+    <script>
+        let connection;
+        let currentUser = null;
+        let currentProfileId = null;
+        let currentEventId = null;
+
+        // Auth functions
+        async function register() {
+            const response = await fetch('http://localhost:50000/users-api/api/User/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: document.getElementById('email').value,
+                    password: document.getElementById('password').value
+                })
+            });
+            const data = await response.json();
+            if (response.ok) {
+                currentUser = data;
+                document.querySelector('.auth-form').hidden = true;
+                document.querySelector('.profile-section').hidden = false;
+            }
+        }
+
+        async function login() {
+            const response = await fetch('http://localhost:50000/users-api/api/User/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: document.getElementById('loginEmail').value,
+                    password: document.getElementById('loginPassword').value
+                })
+            });
+            const data = await response.json();
+            if (response.ok) {
+                currentUser = data;
+                console.log(currentUser)
+                loadProfiles();
+                document.querySelector('.auth-form').hidden = true;
+                document.querySelector('.main-app').hidden = false;
+            }
+        }
+        async function loadProfiles() {
+            const response = await fetch(`http://localhost:50000/users-api/api/Profile/user/${currentUser.userId}`)
+            const data = await response.json();
+            if (response.ok){
+                currentProfileId = data[0].id;
+                document.querySelector('.profile-section').hidden = true;
+                loadEvents();
+            }
+        }
+        async function createProfile() {
+            const response = await fetch('http://localhost:50000/users-api/api/Profile/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    firstName: document.getElementById('firstName').value,
+                    lastName: document.getElementById('lastName').value,
+                    gender: "Male",
+                    userId: currentUser.userId
+                })
+            });
+            
+            const data = await response.json();
+            if (response.ok){
+                currentProfileId = data;
+                document.querySelector('.profile-section').hidden = true;
+                document.querySelector('.main-app').hidden = false;
+                loadEvents();
+            }
+        }
+
+        // Event functions
+        async function createEv() {
+            const eventName = document.getElementById('eventName').value;
+            const response = await fetch('http://localhost:50000/events-api/api/Event/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    creatorId: currentProfileId,
+                    name: eventName
+                })
+            });
+            const eventId = await response.json();
+            console.log(eventId);
+            const list = document.getElementById('events');
+            const li = document.createElement('li');
+            li.textContent = eventName;
+            li.onclick = () => loadMessages(eventId);
+            list.appendChild(li);
+            joinEvent(eventId);
+        }
+
+        async function joinEvent(eventId) {
+            currentEventId = eventId;
+            await connection.invoke('JoinGroup', eventId, currentProfileId);
+            loadMessages(eventId);
+            connection.on(`Receive_${eventId}`, message => {
+                if (currentEventId!=message.eventId)
+                    return;
+                const div = document.createElement('div');
+                div.className = 'message';
+                div.textContent = `${message.profileId}: ${message.content}`;
+                document.getElementById('chatBox').appendChild(div);
+            });
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            await connection.invoke('Send', currentEventId, input.value, currentProfileId);
+            input.value = '';
+        }
+
+        async function leaveEvent() {
+            await connection.invoke('LeaveGroup', currentEventId, currentProfileId);
+            connection.off(`Receive${currentEventId}`);
+            currentEventId = null;
+            document.getElementById('chatBox').innerHTML = '';
+        }
+
+        // Init SignalR
+        async function startConnection() {
+            connection = new signalR.HubConnectionBuilder()
+                .withUrl("http://localhost:50000/messages-api/chatHub", {
+                    skipNegotiation: false, // Должно быть false для negotiate
+                    transport: signalR.HttpTransportType.WebSockets
+                })
+                .build();
+
+            await connection.start();
+        }
+
+        // Load initial data
+        async function loadEvents() {
+            const response = await fetch('http://localhost:50000/events-api/api/Event');
+            const events = await response.json();
+            const list = document.getElementById('events');
+            list.innerHTML = "";
+            events.forEach(event => {
+                const li = document.createElement('li');
+                li.textContent = event.event.name;
+                if (event.event.eventParticipants.some(ep=> ep.profileId===currentProfileId)){
+                    joinEvent(event.event.id)
+                    li.onclick = () => loadMessages(event.event.id);
+                } else {
+                    li.onclick = () => {
+                        joinEvent(event.event.id)
+                        li.onclick = () => loadMessages(event.event.id);
+                    };
+                }
+                list.appendChild(li);
+            });
+        }
+
+        async function loadMessages(eventId) {
+            const response = await fetch(`http://localhost:50000/messages-api/api/Message/${eventId}?page=1&pageSize=20`);
+            const messages = await response.json();
+            const chatbox = document.getElementById('chatBox');
+            chatbox.innerHTML = "";
+            currentEventId = eventId;
+            messages.forEach(message => {
+                const div = document.createElement('div');
+                div.className = 'message';
+                div.textContent = `${message.profileId}: ${message.content}`;
+                chatbox.appendChild(div);
+            });
+        }
+
+        // Initialize
+        startConnection();
+    </script>
+</body>
+</html>

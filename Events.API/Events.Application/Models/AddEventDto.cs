@@ -15,7 +15,7 @@ public class AddEventDto
 
     public string? Place { get; set; }
 
-    public DateTime? Time { get; set; }
+    public DateTime? Time { get; set; } = DateTime.UtcNow;
 
     public decimal? Budget { get; set; }
 
