@@ -12,15 +12,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <OpenApiReference Include="OpenAPIs\swagger.json" CodeGenerator="NSwagCSharp" ClassName="EventsClientApi">
+    <OpenApiReference Include="OpenAPIs\swagger.json" CodeGenerator="NSwagCSharp" ClassName="EventsClientApi" Namespace="Messages.Application.Event">
 		<SourceUri>http://localhost:50004/swagger/v1/swagger.json</SourceUri>
 		<Options>/UseBaseUrl:false /GenerateClientInterfaces:true /OperationGenerationMode:SingleClientFromPathSegments</Options>
 	</OpenApiReference>
-  </ItemGroup>
+    <OpenApiReference Include="OpenAPIs\swagger1.json" CodeGenerator="NSwagCSharp" Namespace="Messages.Application.Users" Options="  &lt;Options&gt;/UseBaseUrl:false /GenerateClientInterfaces:true /OperationGenerationMode:SingleClientFromPathSegments&lt;/Options&gt;" ClassName="UsersApiClient">
+      <SourceUri>http://localhost:50002/swagger/v1/swagger.json</SourceUri>
+	  <Options>/UseBaseUrl:false /GenerateClientInterfaces:true /OperationGenerationMode:SingleClientFromPathSegments</Options>
+
+	</OpenApiReference>
+
+    </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.ApiDescription.Client" Version="7.0.2">

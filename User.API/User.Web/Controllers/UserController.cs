@@ -10,6 +10,7 @@ namespace Users.Web.Controllers
     [Route("api/[controller]")]
     public class UserController(IUserService UserService) : ControllerBase
     {
+        
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegDto regDto)
         {

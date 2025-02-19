@@ -14,12 +14,17 @@ var logger = Log.Logger = new LoggerConfiguration()
   .WriteTo.Console()
   .CreateLogger();
 
+
 logger.Information("Starting web host");
 
+
 builder.AddLoggerConfigs();
+
 builder.Services.AddControllers();
+
 var appLogger = new SerilogLoggerFactory(logger)
     .CreateLogger<Program>();
+
 
 builder.Services.AddInfrastructureServices(builder.Configuration, appLogger);
 builder.Services.AddSwaggerGen(c =>
@@ -30,6 +35,7 @@ builder.Services.AddSwaggerGen(c =>
         Version = "v1"
     });
 });
+
 
 #if (aspire)
 builder.AddServiceDefaults();

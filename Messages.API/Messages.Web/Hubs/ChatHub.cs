@@ -1,5 +1,7 @@
-﻿using Messages.Application;
+﻿using Messages.Application.Event;
 using Messages.Application.Interfaces;
+using Messages.Application.Models;
+using Messages.Application.Users;
 using Messages.Domain.Entities;
 using Microsoft.AspNetCore.SignalR;
 
@@ -9,11 +11,13 @@ public class ChatHub : Hub
 {
     private readonly IMessageService _messageService;
     private readonly IEventsClientApi _eventsClientApi;
+    private readonly IUsersApiClient _usersApiClient;
 
-    public ChatHub(IMessageService messageService, IEventsClientApi eventsClientApi)
+    public ChatHub(IMessageService messageService, IEventsClientApi eventsClientApi, IUsersApiClient usersApiClient)
     {
         _messageService = messageService;
         _eventsClientApi = eventsClientApi;
+        _usersApiClient = usersApiClient;
     }
 
     public async Task Send(int eventId, string content, int profileId)
@@ -26,7 +30,13 @@ public class ChatHub : Hub
             Timestamp = DateTime.UtcNow
         };
         await _messageService.AddMessage(message);
-        await Clients.Group(eventId.ToString()).SendAsync($"Receive_{eventId}", message);
+        var profile = await _usersApiClient.ApiProfileAsync(profileId);
+        await Clients.Group(eventId.ToString()).SendAsync(
+            $"Receive_{eventId}", 
+            new MessageDto() { 
+                Message = message, 
+                Profile = profile
+            });
     }
 
     public async Task JoinGroup(int eventId, int profileId)

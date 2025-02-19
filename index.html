@@ -184,12 +184,12 @@
             currentEventId = eventId;
             await connection.invoke('JoinGroup', eventId, currentProfileId);
             loadMessages(eventId);
-            connection.on(`Receive_${eventId}`, message => {
-                if (currentEventId!=message.eventId)
+            connection.on(`Receive_${eventId}`, messageDto => {
+                if (currentEventId!=messageDto.message.eventId)
                     return;
                 const div = document.createElement('div');
                 div.className = 'message';
-                div.textContent = `${message.profileId}: ${message.content}`;
+                div.textContent = `${messageDto.profile.firstName} ${messageDto.profile.lastName}: ${messageDto.message.content}`;
                 document.getElementById('chatBox').appendChild(div);
             });
         }
@@ -243,14 +243,14 @@
 
         async function loadMessages(eventId) {
             const response = await fetch(`http://localhost:50000/messages-api/api/Message/${eventId}?page=1&pageSize=20`);
-            const messages = await response.json();
+            const messageDtos = await response.json();
             const chatbox = document.getElementById('chatBox');
             chatbox.innerHTML = "";
             currentEventId = eventId;
-            messages.forEach(message => {
+            messageDtos.forEach(dto => {
                 const div = document.createElement('div');
                 div.className = 'message';
-                div.textContent = `${message.profileId}: ${message.content}`;
+                div.textContent = `${dto.profile.firstName} ${dto.profile.lastName}: ${dto.message.content}`;
                 chatbox.appendChild(div);
             });
         }

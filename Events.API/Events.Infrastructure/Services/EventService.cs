@@ -60,7 +60,7 @@ public class EventService : IEventService
     {
 
         var events = await _eventRepository.Get(includeProperties: "Polls,EventParticipants");
-        var profileIds = events.Select(e=>e.CreatorId).Distinct().ToList();
+        var profileIds = events.Select(e=>e.CreatorId).Distinct();
 
         if (profileIds.Any())
         {

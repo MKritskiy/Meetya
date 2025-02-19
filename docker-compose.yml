@@ -1,4 +1,14 @@
 services:
+  files.web:
+    image: ${DOCKER_REGISTRY-}filesweb
+    build:
+      context: .
+      dockerfile: Files.API/Files.Web/Dockerfile
+    environment:
+      - Storage__BaseUrl=http://localhost:50000/web-files/api/files/static
+    ports:
+      - "50005:8080"
+
   events.web:
     image: ${DOCKER_REGISTRY-}eventsweb
     build:

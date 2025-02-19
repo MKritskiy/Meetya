@@ -62,6 +62,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решен
 		index.html = index.html
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files.API", "Files.API", "{4126844B-2F22-4BFB-BA06-DE6BA82839B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Files.Web", "Files.API\Files.Web\Files.Web.csproj", "{D9C95BED-786E-4666-B88C-22C9E0D26453}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -156,6 +160,10 @@ Global
 		{8F6A88A2-B25E-4F92-B83C-78940A0AB59F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F6A88A2-B25E-4F92-B83C-78940A0AB59F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F6A88A2-B25E-4F92-B83C-78940A0AB59F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9C95BED-786E-4666-B88C-22C9E0D26453}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9C95BED-786E-4666-B88C-22C9E0D26453}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9C95BED-786E-4666-B88C-22C9E0D26453}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9C95BED-786E-4666-B88C-22C9E0D26453}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -181,6 +189,7 @@ Global
 		{04A070F9-E72E-4991-8ABB-08E44A3B036C} = {F946036B-85BC-4248-90F6-39A03C7A51A0}
 		{F4E193D5-8FB6-4622-AF00-A1B6CD1E88F6} = {F946036B-85BC-4248-90F6-39A03C7A51A0}
 		{8F6A88A2-B25E-4F92-B83C-78940A0AB59F} = {93C5E209-D652-45ED-934F-DD27FDDA297D}
+		{D9C95BED-786E-4666-B88C-22C9E0D26453} = {4126844B-2F22-4BFB-BA06-DE6BA82839B0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0FFE1AF1-06AA-4C81-87D2-344E9F1FBD5C}
