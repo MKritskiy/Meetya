@@ -10,12 +10,23 @@ namespace Users.Infrastructure.Services
         private readonly IUserRepository _userRepository;
         private readonly ITokenService _tokenService;
         private readonly IEncrypt _encrypt;
+        private readonly ICodeCacheService _codeCache;
+        private readonly ICodeGenerator _codeGenerator;
+        private readonly INotificationQueueService _notificationQueue;
 
-        public UserService(IUserRepository userRepository, ITokenService tokenService, IEncrypt encrypt)
+        public UserService(IUserRepository userRepository,
+                           ITokenService tokenService,
+                           IEncrypt encrypt,
+                           ICodeCacheService codeCache,
+                           ICodeGenerator codeGenerator,
+                           INotificationQueueService notificationQueue)
         {
             _userRepository = userRepository;
             _tokenService = tokenService;
             _encrypt = encrypt;
+            _codeCache = codeCache;
+            _codeGenerator = codeGenerator;
+            _notificationQueue = notificationQueue;
         }
 
         public async Task<int> CreateUser(User user)
@@ -31,7 +42,7 @@ namespace Users.Infrastructure.Services
         {
             var user = await _userRepository.GetUserByEmailAsync(loginDto.Email);
 
-            if (user.Id != null && user.Password == _encrypt.HashPassword(loginDto.Password, user.Salt))
+            if (user.Id != null && user.Password == _encrypt.HashPassword(loginDto.Password, user.Salt) && user.Verified)
             {
                 var token = _tokenService.GenerateToken(user);
                 return new AfterAuthDto { Token = token, UserId = user.Id ?? 0 };
@@ -39,26 +50,62 @@ namespace Users.Infrastructure.Services
             throw new AuthorizationException();
         }
 
-        public async Task<AfterAuthDto> Register(RegDto regDto)
+        public async Task GenerateAndSendConfiramtionCode(string? email = null, string? phone = null)
+        {
+            if (email == null && phone == null) throw new InvalidOperationException("Inncorrect send data");
+            string code = "";
+
+            if (email!=null)
+                code = _codeGenerator.GenerateCodeForEmail(email);
+            if (phone!=null)
+                code = _codeGenerator.GenerateCodeForPhone(phone);
+
+            await _codeCache.StoreCodeAsync($"email:{email}", code);
+
+            await _notificationQueue.PublishNotification(new Domain.QueueEntities.NotificationMessage
+            {
+                Type = "email",
+                Target = email,
+                Code = code,
+            });
+        }
+
+        public async Task Register(RegDto regDto)
         {
             User user = new User() { Email = regDto.Email, Password = regDto.Password };
             using (var scope = General.Helpers.CreateTransactionScope())
             {
                 await ValidateEmail(user.Email);
+                //TODO:Сделать указание веремени создания Created для записей в БД при их создании внутри EF контекста
+                user.Created = DateTime.UtcNow;
                 int id = await CreateUser(user);
-                var token = _tokenService.GenerateToken(user);
+                await GenerateAndSendConfiramtionCode(regDto.Email);
                 scope.Complete();
-
-                return new AfterAuthDto { Token = token, UserId = id };
             }
+        }
+
+        public async Task<AfterAuthDto> ConfirmEmail(string email, string code)
+        {
+            var isValid = await _codeCache.ValidateCodeAsync($"email:{email}", code);
+            if (!isValid) throw new InvalidConfirmationCodeException();
+
+            var user = await _userRepository.GetUserByEmailAsync(email);
+            user.Verified = true;
+            await _userRepository.UpdateAsync(user);
+
+            await _codeCache.RemoveCodeAsync($"email:{email}");
+
+            var token = _tokenService.GenerateToken(user);
+            int id = user.Id ?? 0;
+            return new AfterAuthDto { Token = token, UserId = id };
         }
 
         public async Task ValidateEmail(string email)
         {
             var user = await _userRepository.GetUserByEmailAsync(email);
-            if (user.Id != null) throw new DuplicateEmailException();
+            if (user.Id != null && (DateTimeOffset.UtcNow.Subtract(user.Created) <= TimeSpan.FromMinutes(10) || user.Verified)) throw new DuplicateEmailException();
         }
-
+       
         public Task<int> UpdateUser(int userId, string phoneNumber, string password)
         {
             throw new NotImplementedException();

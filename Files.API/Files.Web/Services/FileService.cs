@@ -83,16 +83,14 @@ public static class FileService
         int? maxHeight = null,
         int quality = 75)
     {
-        //Получаем расширение изображения
         var fileExtension = Path.GetExtension(originalFileName).ToLowerInvariant();
 
-        //Проверяем, поддерживаемое ли расширение изображния
         if (!AllowedImageExtensions.Contains(fileExtension)) throw new InvalidOperationException("Unsupported image format");
         
-        //Загружаем изображение из переданного потока
+
         using var image = await Image.LoadAsync(imageStream);
 
-        //Создаем настройки изображния
+
         var options = new ResizeOptions
         {
             Size = new Size(maxWidth ?? image.Width, maxHeight ?? image.Height),
@@ -103,10 +101,9 @@ public static class FileService
         //Применяем настройки к изображнию
         image.Mutate(x=>x.Resize(options));
 
-        //Формируем временный поток в памяти
+
         using var processedStream = new MemoryStream();
 
-        //Сохраняем обработанное изображение во временный поток
         await image.SaveAsJpegAsync(processedStream, new JpegEncoder { Quality = quality });
 
 
@@ -122,7 +119,6 @@ public static class FileService
         string fileName = $"{uniqueId}.jpeg";
         string fullPath = Path.Join(FOLDER_PREFIX, storagePath, fileName);
 
-        //Создаем необходимые директории, если их еще нет
         EnsureDirectoryExists(fullPath);
 
         //Переносим данные из веременного потока в файл

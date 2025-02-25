@@ -98,7 +98,7 @@ public class FilesController : ControllerBase
             var stream = await FileService.GetFileAsync(filePath);
             var mimeType = GetMimeType(Path.GetExtension(filePath));
 
-            return File(stream, mimeType);
+            return File(stream, mimeType, Path.GetFileName(filePath));
         }
         catch (FileNotFoundException)
         {

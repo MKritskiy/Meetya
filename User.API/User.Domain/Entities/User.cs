@@ -12,5 +12,6 @@ namespace Users.Domain.Entities
         public string? PhoneNumber { get; set; }
         public Profile? Profile { get; set; }
         public string Role { get; set; } = Roles.User;
+        public bool Verified { get; set; } = false;
     }
 }

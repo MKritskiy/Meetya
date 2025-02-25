@@ -16,8 +16,8 @@ namespace Users.Web.Controllers
         {
             try
             {
-                var result = await UserService.Register(regDto);
-                return Ok(result);
+                await UserService.Register(regDto);
+                return Ok();
             }
             catch (DuplicateEmailException)
             {
@@ -28,7 +28,19 @@ namespace Users.Web.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-
+        [HttpPost("verification")]
+        public async Task<IActionResult> Verification([FromBody] VerificationDto verDto)
+        {
+            try
+            {
+                var result = await UserService.ConfirmEmail(verDto.Email, verDto.Code);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {

@@ -9,6 +9,15 @@ public class Message : BaseEntity
     [Required]
     public int ProfileId { get; set; }
     public DateTime Timestamp { get; set; }
+    public ContentType ContentType { get; set; }
+    public bool IsEdited { get; set; }
+    public bool IsWatched { get; set; }
     [Required]
     public int EventId { get; set; }
+}
+public enum ContentType
+{
+    Text,
+    Image,
+    File
 }
