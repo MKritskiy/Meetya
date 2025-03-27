@@ -43,7 +43,7 @@ public class NotificationWorker : BackgroundService
             {
                 Serilog.Log.Logger.Information($"Processing...");
                 await ProcessMessage(ea);
-                await _channel.BasicRejectAsync(ea.DeliveryTag, false);
+                await _channel.BasicAckAsync(ea.DeliveryTag, false);
             }
             catch (Exception ex)
             {
@@ -52,7 +52,7 @@ public class NotificationWorker : BackgroundService
             }
         };
 
-        await _channel.BasicConsumeAsync("notifications", false, consumer);
+        await _channel.BasicConsumeAsync(HelpersConstants.QUEUE_NAME, false, consumer);
 
         while (!stoppingToken.IsCancellationRequested)
         {

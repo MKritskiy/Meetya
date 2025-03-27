@@ -10,10 +10,12 @@ namespace Events.Web.Controllers;
 public class EventController : ControllerBase
 {
     private readonly IEventService _eventService;
+    private readonly IEventRepository _eventRepository;
 
-    public EventController(IEventService eventService)
+    public EventController(IEventService eventService, IEventRepository eventRepository)
     {
         _eventService = eventService;
+        _eventRepository = eventRepository;
     }
 
     [HttpPost("add")]
@@ -73,12 +75,13 @@ public class EventController : ControllerBase
         }
     }
 
-    [HttpPut("update")]
-    public async Task<IActionResult> UpdateEvent([FromBody] Event @event)
+    [HttpPut("update/{id}")]
+    public async Task<IActionResult> UpdateEvent([FromBody] AddEventDto addEventDto, int id)
     {
         try
         {
-            var result = await _eventService.UpdateEvent(@event);
+            var @event = await _eventRepository.GetByIdAsync(id);
+            var result = await _eventService.UpdateEvent(addEventDto.UpdateEventFields(@event));
             return Ok(result);
         }
         catch (Exception ex)

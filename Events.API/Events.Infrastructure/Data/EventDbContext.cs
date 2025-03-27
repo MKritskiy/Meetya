@@ -1,8 +1,9 @@
 ﻿using Events.Domain.Entities;
+using Infrastructure.Data;
 
 namespace Events.Infrastructure.Data;
 
-public class EventDbContext : DbContext
+public class EventDbContext : AuditableDbContext
 {
     public EventDbContext(DbContextOptions<EventDbContext> options) : base(options) { }
 

@@ -10,10 +10,12 @@ namespace Events.Web.Controllers;
 public class PollController : ControllerBase
 {
     private readonly IPollService _pollService;
+    private readonly IPollRepository _pollRepository;
 
-    public PollController(IPollService pollService)
+    public PollController(IPollService pollService, IPollRepository pollRepository)
     {
         _pollService = pollService;
+        _pollRepository = pollRepository;
     }
 
     [HttpPost("add")]
@@ -72,12 +74,13 @@ public class PollController : ControllerBase
         }
     }
 
-    [HttpPut("update")]
-    public async Task<IActionResult> UpdatePoll([FromBody] Poll poll)
+    [HttpPut("update/{id}")]
+    public async Task<IActionResult> UpdatePoll([FromBody] AddPollDto addPollDto, int id)
     {
         try
         {
-            var result = await _pollService.UpdatePoll(poll);
+            var poll = await _pollRepository.GetByIdAsync(id);
+            var result = await _pollService.UpdatePoll(addPollDto.UpdatePollFields(poll));
             return Ok(result);
         }
         catch (Exception ex)

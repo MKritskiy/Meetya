@@ -19,4 +19,11 @@ public class AddPollDto
         ProfileId = ProfileId,
         PreferredDates = PreferredDates,
     };
+    public Poll UpdatePollFields(Poll poll)
+    {
+        poll.EventId = EventId;
+        poll.ProfileId = ProfileId;
+        poll.PreferredDates = PreferredDates;
+        return poll;
+    }
 }

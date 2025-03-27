@@ -90,6 +90,7 @@ public abstract class BaseRepository<T> : IBaseRepository<T> where T : class
 
     public async Task<bool> UpdateAsync(T entity)
     {
+
         _dbSet.Update(entity);
         await _context.SaveChangesAsync();
         return true;

@@ -49,4 +49,21 @@ public class AddEventDto
         GeoEnabled = GeoEnabled,
 
     };
+    public Event UpdateEventFields(Event @event)
+    {
+        @event.CreatorId = CreatorId;
+        @event.Name = Name;
+        @event.Type = Type;
+        @event.Place = Place;
+        @event.Time = Time;
+        @event.Budget = Budget;
+        @event.PeopleCount = PeopleCount;
+        @event.Description = Description;
+        @event.PhotoPreview = PhotoPreview;
+        @event.Address = Address;
+        @event.Draft = Draft;
+        @event.PollEnabled = PollEnabled;
+        @event.GeoEnabled = GeoEnabled;
+        return @event;
+    }
 }

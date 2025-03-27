@@ -83,6 +83,8 @@ public class EventService : IEventService
     {
         if (@event == null) throw new ArgumentNullException(nameof(@event));
         if (!IsValidEvent(@event)) throw new ArgumentException("Invalid event data.");
+        var updatingEvent = await _eventRepository.GetByIdAsync(@event.Id);
+        
 
         return await _eventRepository.UpdateAsync(@event);
     }
