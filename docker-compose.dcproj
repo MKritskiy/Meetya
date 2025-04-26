@@ -9,6 +9,9 @@
     <DockerServiceName>events.web</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="..\Meetya.Test\UsersApiTests.cs">
+      <Link>UsersApiTests.cs</Link>
+    </None>
     <None Include=".env" />
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />

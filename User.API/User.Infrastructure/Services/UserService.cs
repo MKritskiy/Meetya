@@ -75,9 +75,7 @@ namespace Users.Infrastructure.Services
             User user = new User() { Email = regDto.Email, Password = regDto.Password };
             using (var scope = General.Helpers.CreateTransactionScope())
             {
-                await ValidateEmail(user.Email);
-                //TODO:Сделать указание веремени создания Created для записей в БД при их создании внутри EF контекста
-                user.Created = DateTime.UtcNow;
+                await ValidateEmail(user.Email);   
                 int id = await CreateUser(user);
                 await GenerateAndSendConfiramtionCode(regDto.Email);
                 scope.Complete();
