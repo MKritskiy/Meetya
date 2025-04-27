@@ -16,10 +16,9 @@
 		<SourceUri>http://localhost:50004/swagger/v1/swagger.json</SourceUri>
 		<Options>/UseBaseUrl:false /GenerateClientInterfaces:true /OperationGenerationMode:SingleClientFromPathSegments /GenerateExceptionClasses:true</Options>
 	</OpenApiReference>
-    <OpenApiReference Include="OpenAPIs\swagger1.json" CodeGenerator="NSwagCSharp" Namespace="Messages.Application.Users" Options="  &lt;Options&gt;/UseBaseUrl:false /GenerateClientInterfaces:true /OperationGenerationMode:SingleClientFromPathSegments&lt;/Options&gt;" ClassName="UsersApiClient">
-      <SourceUri>http://localhost:50002/swagger/v1/swagger.json</SourceUri>
-	  <Options>/UseBaseUrl:false /GenerateClientInterfaces:true /OperationGenerationMode:SingleClientFromPathSegments /GenerateExceptionClasses:true</Options>
-
+	<OpenApiReference Include="OpenAPIs\swagger1.json" CodeGenerator="NSwagCSharp" ClassName="UsersApiClient" Namespace="Messages.Application.Users">
+		<SourceUri>http://localhost:50002/swagger/v1/swagger.json</SourceUri>
+		<Options>/UseBaseUrl:false /GenerateClientInterfaces:true /OperationGenerationMode:SingleClientFromPathSegments /GenerateExceptionClasses:true</Options>
 	</OpenApiReference>
 
     </ItemGroup>
