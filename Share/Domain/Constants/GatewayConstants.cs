@@ -14,5 +14,7 @@ public static class GatewayConstants
     public const string FRIEND_CONTAINER_EXTERNAL_HOST = "http://localhost:50003";
     public const string EVENT_CONTAINER_EXTERNAL_HOST = "http://localhost:50004";
     public const string FILE_CONTAINER_EXTERNAL_HOST = "http://localhost:50005";
+    public const string GATEWAY_SERVER_HOST = "https://when-and-where.ru";
+
 
 }

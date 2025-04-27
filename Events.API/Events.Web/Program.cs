@@ -45,6 +45,8 @@ await app.UseAppMiddlewareAndSeedDatabase();
 await app.UseAppSwaggerOpenApiServers(
     new List<OpenApiServer>
     {
+        new OpenApiServer { Url = GatewayConstants.GATEWAY_SERVER_HOST + GatewayConstants.EVENT_API_ROUTE },
+
         new OpenApiServer { Url = GatewayConstants.GATEWAY_EXTERNAL_HOST + GatewayConstants.EVENT_API_ROUTE },
         new OpenApiServer { Url = GatewayConstants.EVENT_CONTAINER_EXTERNAL_HOST}
     });
