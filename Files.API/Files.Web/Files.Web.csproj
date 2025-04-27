@@ -8,7 +8,22 @@
     <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>
   <ItemGroup Condition=" '$(EnableDefaultItems)' == 'true' And '$(EnableDefaultContentItems)' == 'true' ">
+	  <!-- Publish everything under wwwroot, all JSON files, all web.config files and all Razor files -->
 	  <Content Include="wwwroot/**" CopyToPublishDirectory="PreserveNewest" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
+	  <Content Include="**/web.config" CopyToPublishDirectory="PreserveNewest" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder);wwwroot/**" />
+	  <Content Include="**/*.cshtml" CopyToPublishDirectory="PreserveNewest" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder);wwwroot/**" />
+	  <Content Include="**/*.json" CopyToPublishDirectory="PreserveNewest" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder);wwwroot/**" />
+
+	  <!-- Set CopyToPublishDirectory to Never for items under AppDesignerFolder ("Properties", by default) to avoid publishing launchSettings.json -->
+	  <Content Update="$(AppDesignerFolder)/**" CopyToPublishDirectory="Never" Condition="'$(AppDesignerFolder)' != ''" />
+
+	  <!-- Remove Content items from other item types (in a way that CPS understands) -->
+	  <None Remove="wwwroot/**;**/*.json;**/web.config;**/*.cshtml" />
+	  <Compile Remove="wwwroot/**" />
+	  <EmbeddedResource Remove="wwwroot/**" />
+
+	  <!-- Keep track of the default content items for later to distinguish them from newly generated content items -->
+	  <_ContentIncludedByDefault Include="@(Content)" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
@@ -25,6 +40,10 @@
 
   <ItemGroup>
 	<Content Include="wwwroot\**" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
 </Project>
