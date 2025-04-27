@@ -1,49 +1,52 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <DockerfileContext>..\..</DockerfileContext>
-  </PropertyGroup>
-  <ItemGroup Condition=" '$(EnableDefaultItems)' == 'true' And '$(EnableDefaultContentItems)' == 'true' ">
-	  <!-- Publish everything under wwwroot, all JSON files, all web.config files and all Razor files -->
-	  <Content Include="wwwroot/**" CopyToPublishDirectory="PreserveNewest" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
-	  <Content Include="**/web.config" CopyToPublishDirectory="PreserveNewest" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder);wwwroot/**" />
-	  <Content Include="**/*.cshtml" CopyToPublishDirectory="PreserveNewest" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder);wwwroot/**" />
-	  <Content Include="**/*.json" CopyToPublishDirectory="PreserveNewest" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder);wwwroot/**" />
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<DockerfileContext>..\..</DockerfileContext>
+	</PropertyGroup>
 
-	  <!-- Set CopyToPublishDirectory to Never for items under AppDesignerFolder ("Properties", by default) to avoid publishing launchSettings.json -->
-	  <Content Update="$(AppDesignerFolder)/**" CopyToPublishDirectory="Never" Condition="'$(AppDesignerFolder)' != ''" />
+	<ItemGroup Condition=" '$(EnableDefaultItems)' == 'true' And '$(EnableDefaultContentItems)' == 'true' ">
+		<!-- Publish everything under wwwroot, web.config files, and Razor files -->
+		<Content Include="wwwroot/**" CopyToPublishDirectory="PreserveNewest" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
+		<Content Include="**/web.config" CopyToPublishDirectory="PreserveNewest" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder);wwwroot/**" />
+		<Content Include="**/*.cshtml" CopyToPublishDirectory="PreserveNewest" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder);wwwroot/**" />
+		<!-- Remove JSON files from explicit inclusion since they are included by default -->
+		<!-- <Content Include="**/*.json" CopyToPublishDirectory="PreserveNewest" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder);wwwroot/**" /> -->
 
-	  <!-- Remove Content items from other item types (in a way that CPS understands) -->
-	  <None Remove="wwwroot/**;**/*.json;**/web.config;**/*.cshtml" />
-	  <Compile Remove="wwwroot/**" />
-	  <EmbeddedResource Remove="wwwroot/**" />
+		<!-- Set CopyToPublishDirectory to Never for items under AppDesignerFolder ("Properties", by default) to avoid publishing launchSettings.json -->
+		<Content Update="$(AppDesignerFolder)/**" CopyToPublishDirectory="Never" Condition="'$(AppDesignerFolder)' != ''" />
 
-	  <!-- Keep track of the default content items for later to distinguish them from newly generated content items -->
-	  <_ContentIncludedByDefault Include="@(Content)" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.6" />
-	<PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
-	<PackageReference Include="Serilog.Settings.Configuration" Version="8.0.4" />
-	<PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
-  </ItemGroup>
+		<!-- Remove Content items from other item types (in a way that CPS understands) -->
+		<None Remove="wwwroot/**;**/web.config;**/*.cshtml" />
+		<Compile Remove="wwwroot/**" />
+		<EmbeddedResource Remove="wwwroot/**" />
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\Share\Domain\Domain.csproj" />
-    <ProjectReference Include="..\..\Share\Web\Web.csproj" />
-  </ItemGroup>
+		<!-- Keep track of the default content items for later to distinguish them from newly generated content items -->
+		<_ContentIncludedByDefault Include="@(Content)" />
+	</ItemGroup>
 
-  <ItemGroup>
-	<Content Include="wwwroot\**" CopyToOutputDirectory="PreserveNewest" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+		<PackageReference Include="SixLabors.ImageSharp" Version="3.1.6" />
+		<PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
+		<PackageReference Include="Serilog.Settings.Configuration" Version="8.0.4" />
+		<PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\Share\Domain\Domain.csproj" />
+		<ProjectReference Include="..\..\Share\Web\Web.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="wwwroot\**" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="wwwroot\" />
+	</ItemGroup>
 
 </Project>
