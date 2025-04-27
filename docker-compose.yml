@@ -105,8 +105,11 @@ services:
     build:
       context: .
       dockerfile: Yarp.Gateway/Dockerfile
+    environment:
+      - Tls__Pass=${TLS_PASS}
     ports:
-      - "50000:8080"
+      - "8080:8080"
+      - "443:443"
 
   events.db:
     image: postgres

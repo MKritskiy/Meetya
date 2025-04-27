@@ -8,13 +8,20 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("customPolicy", builder =>
     {
-        builder.WithOrigins("http://127.0.0.1:5500")
+        builder.WithOrigins("http://127.0.0.1:5500", "https://when-and-where.ru", "https://www.when-and-where.ru")
                .AllowAnyMethod()
                .AllowAnyHeader()
                .AllowCredentials();
     });
 });
-
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(8080); // HTTP
+    options.ListenAnyIP(443, listenOptions =>
+    {
+        listenOptions.UseHttps("/etc/letsencrypt/live/when-and-where.ru/cert.pfx");
+    });
+});
 var app = builder.Build();
 
 app.UseWebSockets();
