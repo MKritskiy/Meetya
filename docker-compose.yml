@@ -34,7 +34,7 @@ services:
       context: .
       dockerfile: Files.API/Files.Web/Dockerfile
     environment:
-      - Storage__BaseUrl=http://localhost:50000/web-files/api/files/static
+      - Storage__BaseUrl=http://yarp.gateway:8080/web-files/api/files/static
     ports:
       - "50005:8080"
 

@@ -1,6 +1,5 @@
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Services.AddReverseProxy()
     .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
@@ -14,6 +13,7 @@ builder.Services.AddCors(options =>
                .AllowCredentials();
     });
 });
+
 builder.WebHost.ConfigureKestrel(options =>
 {
     options.ListenAnyIP(8080); // HTTP
@@ -22,8 +22,11 @@ builder.WebHost.ConfigureKestrel(options =>
         listenOptions.UseHttps("/app/certs/cert.pfx");
     });
 });
+
 var app = builder.Build();
 
+app.UseHttpsRedirection(); // Перенаправление HTTP на HTTPS
+app.UseHsts(); // Включение HSTS
 app.UseWebSockets();
 app.UseCors("customPolicy");
 app.MapReverseProxy(proxyPipeline =>
@@ -32,7 +35,5 @@ app.MapReverseProxy(proxyPipeline =>
     proxyPipeline.UseSessionAffinity();
     proxyPipeline.UseLoadBalancing();
 });
-
-
 
 app.Run();
