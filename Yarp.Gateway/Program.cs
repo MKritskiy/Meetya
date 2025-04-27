@@ -19,7 +19,7 @@ builder.WebHost.ConfigureKestrel(options =>
     options.ListenAnyIP(8080); // HTTP
     options.ListenAnyIP(443, listenOptions =>
     {
-        listenOptions.UseHttps("/etc/letsencrypt/live/when-and-where.ru/cert.pfx");
+        listenOptions.UseHttps("/app/certs/cert.pfx");
     });
 });
 var app = builder.Build();

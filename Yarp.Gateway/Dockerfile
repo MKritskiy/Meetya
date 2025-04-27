@@ -24,5 +24,5 @@ RUN dotnet publish "./Yarp.Gateway.csproj" -c $BUILD_CONFIGURATION -o /app/publi
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-COPY ./Yarp.Gateway/certs /app/certs  # Копируем папку с сертификатом
+COPY /etc/letsencrypt/live/when-and-where.ru/ /app/certs  # Копируем папку с сертификатом
 ENTRYPOINT ["dotnet", "Yarp.Gateway.dll"]
