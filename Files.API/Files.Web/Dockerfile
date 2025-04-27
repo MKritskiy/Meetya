@@ -28,5 +28,5 @@ RUN dotnet publish "./Files.Web.csproj" -c $BUILD_CONFIGURATION -o /app/publish 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-COPY ["Files.API/Files.Web/wwwroot", "wwwroot"]
+COPY ["Files.API/Files.Web/wwwroot", "/app/wwwroot"]
 ENTRYPOINT ["dotnet", "Files.Web.dll"]
