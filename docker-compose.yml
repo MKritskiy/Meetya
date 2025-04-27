@@ -95,6 +95,8 @@ services:
       - ConnectionStrings__ConnectionString=Host=messages.db;Port=5432;Database=MessagesDB;Username=postgres;Password=Pass1234
     depends_on:
       - messages.db
+      - users.web
+      - events.web
     ports:
       - "50001:8080"
 

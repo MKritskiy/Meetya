@@ -119,26 +119,37 @@
         }
       }
     },
-    "/api/Event/update": {
+    "/api/Event/update/{id}": {
       "put": {
         "tags": [
           "Event"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
         ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Event"
+                "$ref": "#/components/schemas/AddEventDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Event"
+                "$ref": "#/components/schemas/AddEventDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Event"
+                "$ref": "#/components/schemas/AddEventDto"
               }
             }
           }
@@ -313,26 +324,37 @@
         }
       }
     },
-    "/api/Poll/update": {
+    "/api/Poll/update/{id}": {
       "put": {
         "tags": [
           "Poll"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
         ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Poll"
+                "$ref": "#/components/schemas/AddPollDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Poll"
+                "$ref": "#/components/schemas/AddPollDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Poll"
+                "$ref": "#/components/schemas/AddPollDto"
               }
             }
           }

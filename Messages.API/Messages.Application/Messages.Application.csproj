@@ -12,14 +12,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <OpenApiReference Include="OpenAPIs\swagger.json" CodeGenerator="NSwagCSharp" ClassName="EventsClientApi" Namespace="Messages.Application.Event">
-		<SourceUri>http://localhost:50004/swagger/v1/swagger.json</SourceUri>
-		<Options>/UseBaseUrl:false /GenerateClientInterfaces:true /OperationGenerationMode:SingleClientFromPathSegments /GenerateExceptionClasses:true</Options>
-	</OpenApiReference>
-	<OpenApiReference Include="OpenAPIs\swagger1.json" CodeGenerator="NSwagCSharp" ClassName="UsersApiClient" Namespace="Messages.Application.Users">
-		<SourceUri>http://localhost:50002/swagger/v1/swagger.json</SourceUri>
-		<Options>/UseBaseUrl:false /GenerateClientInterfaces:true /OperationGenerationMode:SingleClientFromPathSegments /GenerateExceptionClasses:true</Options>
-	</OpenApiReference>
+
+	  <OpenApiReference Include="OpenAPIs\swagger.json" CodeGenerator="NSwagCSharp" ClassName="EventsClientApi" Namespace="Messages.Application.Event">
+		  <SourceUri>http://localhost:50004/swagger/v1/swagger.json</SourceUri>
+		  <Options>/UseBaseUrl:false /GenerateClientInterfaces:true /OperationGenerationMode:SingleClientFromPathSegments /AdditionalNamespaceUsages:Ent.Api.Exceptions /GenerateExceptionClasses:false
+	  </Options>
+	  </OpenApiReference>
+	  <OpenApiReference Include="OpenAPIs\swagger1.json" CodeGenerator="NSwagCSharp" ClassName="UsersApiClient" Namespace="Messages.Application.Users">
+		  <SourceUri>http://localhost:50002/swagger/v1/swagger.json</SourceUri>
+		  <Options>/UseBaseUrl:false /GenerateClientInterfaces:true /OperationGenerationMode:SingleClientFromPathSegments /AdditionalNamespaceUsages:Ent.Api.Exceptions /GenerateExceptionClasses:false
+	  </Options>
+	  </OpenApiReference>
 
     </ItemGroup>
 
