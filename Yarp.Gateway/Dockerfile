@@ -3,7 +3,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
-EXPOSE 443  # Порт для HTTPS
+EXPOSE 443 
 
 # Этот этап используется для сборки проекта службы
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
@@ -24,5 +24,4 @@ RUN dotnet publish "./Yarp.Gateway.csproj" -c $BUILD_CONFIGURATION -o /app/publi
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-COPY /etc/letsencrypt/live/when-and-where.ru /app/certs  # Копируем папку certs из Meetya\Yarp.Gateway\certs
 ENTRYPOINT ["dotnet", "Yarp.Gateway.dll"]
