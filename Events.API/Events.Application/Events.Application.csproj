@@ -9,7 +9,7 @@
   <ItemGroup>
     <OpenApiReference Include="OpenAPIs\swagger.json" CodeGenerator="NSwagCSharp" ClassName="UsersApiClient">
       <SourceUri>http://localhost:50002/swagger/v1/swagger.json</SourceUri>
-	  <Options>/UseBaseUrl:false /GenerateClientInterfaces:true</Options>
+	  <Options>/UseBaseUrl:false /GenerateClientInterfaces:true /GenerateExceptionClasses:true</Options>
     </OpenApiReference>
   </ItemGroup>
 
