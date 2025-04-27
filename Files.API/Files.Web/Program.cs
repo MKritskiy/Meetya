@@ -54,16 +54,23 @@ var app = builder.Build();
 
 
 
-app.UseStaticFiles(new StaticFileOptions
+var wwwrootPath = Path.Combine(builder.Environment.ContentRootPath, "wwwroot");
+if (Directory.Exists(wwwrootPath))
 {
-    FileProvider = new PhysicalFileProvider(
-        Path.Combine(builder.Environment.ContentRootPath, "wwwroot")),
-    RequestPath = "/static",
-    OnPrepareResponse = ctx =>
+    app.UseStaticFiles(new StaticFileOptions
     {
-        ctx.Context.Response.Headers.Append("Cache-Control", "public,max-age=604800");
-    }
-});
+        FileProvider = new PhysicalFileProvider(wwwrootPath),
+        RequestPath = "/static",
+        OnPrepareResponse = ctx =>
+        {
+            ctx.Context.Response.Headers.Append("Cache-Control", "public,max-age=604800");
+        }
+    });
+}
+else
+{
+    appLogger.LogWarning("wwwroot directory not found at {Path}. Static files will not be served.", wwwrootPath);
+}
 
 
 if (app.Environment.IsDevelopment())
