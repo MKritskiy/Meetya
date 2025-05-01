@@ -22,13 +22,17 @@ builder.WebHost.ConfigureKestrel(options =>
         listenOptions.UseHttps("/app/certs/cert.pfx");
     });
 });
-
+builder.Services.AddHealthChecks();
 var app = builder.Build();
 
 app.UseHttpsRedirection(); // Перенаправление HTTP на HTTPS
 app.UseHsts(); // Включение HSTS
 app.UseWebSockets();
 app.UseCors("customPolicy");
+
+app.UseHealthChecks("/health");
+app.MapHealthChecks("/health");
+
 app.MapReverseProxy(proxyPipeline =>
 {
     proxyPipeline.UseWebSockets();

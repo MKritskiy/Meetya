@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Notification.Web.Interfaces;
 using Notification.Web.Models;
 using Notification.Web.Services;
@@ -41,7 +42,25 @@ builder.Services.AddTransient<IEmailService, SmtpEmailService>();
 //builder.Services.AddSingleton<IEmailService, SendGridEmailService>();
 builder.Services.AddSingleton<ISmsService, TwilioSmsService>();
 builder.Services.AddHostedService<NotificationWorker>();
-
+var connStr = $"amqp://{builder.Configuration["RabbitMQ:Username"]}:{builder.Configuration["RabbitMQ:Password"]}@{builder.Configuration["RabbitMQ:Host"]}:{builder.Configuration["RabbitMQ:Port"]}";
+var factory = new ConnectionFactory()
+{
+    Uri = new Uri(connStr),
+    AutomaticRecoveryEnabled = true
+};
+try
+{
+    var connection = await factory.CreateConnectionAsync();
+    builder.Services
+         .AddSingleton(connection)
+         .AddHealthChecks()
+         .AddCheck("self", () => HealthCheckResult.Healthy("Application is running"))
+         .AddRabbitMQ(name: "rabbitmq-check", tags: new[] { "rabbitmq" });
+}
+catch (Exception e)
+{
+    Log.Logger.Error("Exception raised: " + e.Message);
+}
 
 
 
@@ -51,6 +70,7 @@ builder.Services.AddLogging(logging =>
 
 var app = builder.Build();
 
-
+app.UseHealthChecks("/health");
+app.MapHealthChecks("/health");
 
 app.Run();
