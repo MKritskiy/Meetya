@@ -1,4 +1,20 @@
 services:
+  notifications.web:
+    image: ${DOCKER_REGISTRY-}notificationsweb
+    build:
+      context: .
+      dockerfile: Notifications.RabbitMQ/Notification.Web/Dockerfile
+    environment:
+      - RabbitMQ__Host=rabbitmq
+      - SendGrid__ApiKey=${SENDGRID_API_KEY}
+      - Twilio__AccountSid=${TWILIO_SID}
+      - Twilio__AuthToken=${TWILIO_TOKEN}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
   rabbitmq:
     image: rabbitmq:3-management
     hostname: rabbitmq
@@ -14,25 +30,7 @@ services:
       timeout: 5s
       retries: 5
    
-  notifications.web:
-    image: ${DOCKER_REGISTRY-}notificationsweb
-    build:
-      context: .
-      dockerfile: Notifications.RabbitMQ/Notification.Web/Dockerfile
-    environment:
-      - RabbitMQ__Host=rabbitmq
-      - SendGrid__ApiKey=${SENDGRID_API_KEY}
-      - Twilio__AccountSid=${TWILIO_SID}
-      - Twilio__AuthToken=${TWILIO_TOKEN}
-    depends_on:
-       rabbitmq:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:80/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
+
 
   files.web:
     image: ${DOCKER_REGISTRY-}filesweb
@@ -117,11 +115,12 @@ services:
       - "8080:8080"
       - "443:443"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:80/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 10s
+
   events.db:
     image: postgres
     environment:
