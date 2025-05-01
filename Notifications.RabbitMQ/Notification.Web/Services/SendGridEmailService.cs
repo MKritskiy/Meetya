@@ -15,7 +15,7 @@ public class SendGridEmailService : IEmailService
         _logger = logger;
     }
 
-    public async Task SendEmailAsync(string email, string code)
+    public async Task SendEmailAsync(string email, string code, CancellationToken cancellationToken = default)
     {
         try
         {
